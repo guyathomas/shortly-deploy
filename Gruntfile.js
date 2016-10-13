@@ -12,11 +12,10 @@ module.exports = function(grunt) {
           'views/**/*.js', 
           'app/**/*.js', 
           'server.js', 
-          'server-config.js', 
-          'lib/**/*.js'
+          'server-config.js'
         ],
-        dest: 'dist/built.js'
-      },
+        dest: 'public/dist/built.js'
+      }
     },
 
     mochaTest: {
@@ -35,6 +34,11 @@ module.exports = function(grunt) {
     },
 
     uglify: {
+      'my_target': {
+        files: {
+          'public/dist/built.min.js': ['public/dist/built.js']
+        }
+      }
     },
 
     eslint: {
@@ -43,12 +47,20 @@ module.exports = function(grunt) {
         'views/**/*.js', 
         'app/**/*.js', 
         'server.js', 
-        'server-config.js', 
-        'lib/**/*.js'
+        'server-config.js'
       ]
     },
 
     cssmin: {
+      options: {
+        shorthandCompacting: false,
+        roundingPrecision: -1
+      },
+      target: {
+        files: {
+          'public/dist/output.css': ['public/style.css']
+        }
+      }
     },
 
     watch: {
@@ -96,6 +108,7 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('build', [
+    grunt.task.run(['test', 'eslint', 'concat', 'cssmin', 'uglify'])
   ]);
 
   grunt.registerTask('upload', function(n) {
